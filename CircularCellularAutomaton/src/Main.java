@@ -139,7 +139,7 @@ class CircAut {
 	    Matrix operator * (const Matrix& rhs) const {
 	        Matrix ret(n);
 	        for(int i=0;i<n;i++) {
-	            for(int j=0;j<n;j++)//第i行的元素是由第0行从左往右移动了i个,所以A(i,j)=A(0,j-i) 
+	            for(int j=0;j<n;j++) 
 	                ret.M[i]+=M[j]*rhs.M[(j-i+n)%n];
 	            ret.M[i]%=MOD;
 	        }
@@ -175,4 +175,48 @@ class CircAut {
 //	    }
 //	    return 0;
 //	}
+}
+
+class Matrix {
+    
+	static int N;	// size of the matrix
+ 
+	/**
+	 * compute pow(base, pow)
+	 * O(N^3) * logN
+	**/
+	static long[][] matrixPower(long[][] base, long pow)	{
+		long [][] ans = new long [N][N];
+		// generate identity matrix
+		for (int i = 0; i < N; i++)	ans[i][i] = 1;
+ 
+		// binary exponentiation
+		while ( pow != 0 )	{
+			if	( (pow&1) != 0 )	ans = multiplyMatrix(ans, base);
+ 
+			base = multiplyMatrix(base, base);
+ 
+			pow >>= 1;
+		}
+ 
+		return	ans;
+	}
+ 
+	/**
+	 * compute m * m2
+	 * O(N^3)
+	**/
+	static long[][] multiplyMatrix(long[][] m, long[][] m2)	{
+		long[][] ans = new long[N][N];
+ 
+		for (int i = 0; i < N; i++)	for (int j = 0; j < N; j++)	{
+			ans[i][j] = 0;
+			for (int k = 0; k < N; k++)	{
+				ans[i][j] += m[i][k] * m2[k][j];
+			}
+		}
+ 
+		return	ans;
+	}
+ 
 }
